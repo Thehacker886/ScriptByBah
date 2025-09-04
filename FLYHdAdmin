@@ -1,0 +1,254 @@
+-- 🟣 Fly Suave V6 com Interface Customizada + Botão Minimizar no Cabeçalho
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local CollectionService = game:GetService("CollectionService")
+local player = Players.LocalPlayer
+
+-- Variáveis do Fly
+local flyEnabled = false
+local flying = false
+local flySpeed = 50
+local acceleration = 6
+local rotationSmoothness = 4
+local bodyVelocity, bodyGyro, flyConnection
+local lastLookDirection = Vector3.new(0, 0, 0)
+local firstActivation = true
+
+-- Criar interface personalizada
+local G2L = {}
+
+-- ScreenGui
+G2L["ScreenGui_1"] = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+G2L["ScreenGui_1"]["ZIndexBehavior"] = Enum.ZIndexBehavior.Sibling
+G2L["ScreenGui_1"].ResetOnSpawn = false
+CollectionService:AddTag(G2L["ScreenGui_1"], "main")
+
+-- Frame principal
+local mainFrame = Instance.new("Frame", G2L["ScreenGui_1"])
+mainFrame.BackgroundColor3 = Color3.fromRGB(41, 41, 41)
+mainFrame.Size = UDim2.new(0, 196, 0, 130)
+mainFrame.Position = UDim2.new(0, 306, 0, 84)
+mainFrame.BackgroundTransparency = 0.2
+Instance.new("UICorner", mainFrame)
+
+-- Adicionar UIDragDetector corretamente
+local dragDetector = Instance.new("TextButton", mainFrame)
+dragDetector.Size = UDim2.new(1, 0, 0, 26)
+dragDetector.Position = UDim2.new(0, 0, 0, 0)
+dragDetector.BackgroundTransparency = 1
+dragDetector.Text = ""
+dragDetector.ZIndex = 2
+
+-- Cabeçalho
+local header = Instance.new("TextLabel", mainFrame)
+header.BackgroundColor3 = Color3.fromRGB(162, 8, 255)
+header.Text = "FLY"
+header.Size = UDim2.new(0, 196, 0, 26)
+header.TextSize = 18
+header.TextXAlignment = Enum.TextXAlignment.Left
+header.TextColor3 = Color3.fromRGB(0, 0, 0)
+header.Font = Enum.Font.SourceSansBold
+Instance.new("UICorner", header).CornerRadius = UDim.new(0, 2)
+
+-- Botão Minimizar dentro do cabeçalho
+local minimizeButton = Instance.new("TextButton", header)
+minimizeButton.Size = UDim2.new(0, 24, 0, 20)
+minimizeButton.Position = UDim2.new(1, -28, 0, 3)
+minimizeButton.BackgroundColor3 = Color3.fromRGB(192, 0, 255)
+minimizeButton.BackgroundTransparency = 0.15
+minimizeButton.Text = "-"
+minimizeButton.TextSize = 18
+minimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+minimizeButton.Font = Enum.Font.SourceSansBold
+Instance.new("UICorner", minimizeButton).CornerRadius = UDim.new(0, 3)
+
+-- Botão Toggle Fly
+local toggleButton = Instance.new("TextButton", mainFrame)
+toggleButton.Size = UDim2.new(0, 146, 0, 30)
+toggleButton.Position = UDim2.new(0, 22, 0, 42)
+toggleButton.Text = "ENABLE"
+toggleButton.TextSize = 14
+toggleButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+toggleButton.BackgroundColor3 = Color3.fromRGB(144, 0, 255)
+toggleButton.Font = Enum.Font.SourceSansBold
+Instance.new("UICorner", toggleButton)
+
+-- Label Speed
+local speedLabel = Instance.new("TextLabel", mainFrame)
+speedLabel.Text = "Speed"
+speedLabel.Size = UDim2.new(0, 76, 0, 24)
+speedLabel.Position = UDim2.new(0, 26, 0, 90)
+speedLabel.TextSize = 18
+speedLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+speedLabel.BackgroundTransparency = 1
+
+-- TextBox Speed
+local speedTextBox = Instance.new("TextBox", mainFrame)
+speedTextBox.Size = UDim2.new(0, 50, 0, 26)
+speedTextBox.Position = UDim2.new(0, 120, 0, 90)
+speedTextBox.Text = tostring(flySpeed)
+speedTextBox.TextSize = 14
+speedTextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+speedTextBox.BackgroundColor3 = Color3.fromRGB(131, 0, 187)
+speedTextBox.BackgroundTransparency = 0.19
+
+-- Variável minimizar
+local isMinimized = false
+local originalSize = mainFrame.Size
+
+-- Lista para armazenar os elementos que serão escondidos
+local elementsToHide = {toggleButton, speedLabel, speedTextBox}
+
+local function toggleMinimize()
+    isMinimized = not isMinimized
+    if isMinimized then
+        for _, element in ipairs(elementsToHide) do
+            element.Visible = false
+        end
+        mainFrame.Size = UDim2.new(0, 196, 0, 26)
+        minimizeButton.Text = "+"
+    else
+        for _, element in ipairs(elementsToHide) do
+            element.Visible = true
+        end
+        mainFrame.Size = originalSize
+        minimizeButton.Text = "-"
+    end
+end
+
+-- Configurar o arrasto da janela
+local dragging
+local dragInput
+local dragStart
+local startPos
+
+local function update(input)
+    local delta = input.Position - dragStart
+    mainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+
+dragDetector.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = mainFrame.Position
+        
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+dragDetector.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        update(input)
+    end
+end)
+
+-- Funções auxiliares Fly
+local function getCharacter() return player.Character or player.CharacterAdded:Wait() end
+local function getRootPart() return getCharacter():FindFirstChild("HumanoidRootPart") end
+local function enableNoclip()
+    for _, part in ipairs(getCharacter():GetDescendants()) do
+        if part:IsA("BasePart") then part.CanCollide = false end
+    end
+end
+
+local function waitForControlModule()
+    local playerModule = player:WaitForChild("PlayerScripts"):WaitForChild("PlayerModule")
+    return require(playerModule):GetControls()
+end
+
+-- Start Fly
+local function startFly()
+    local root = getRootPart()
+    if not root then return end
+    flying = true
+    if bodyVelocity then bodyVelocity:Destroy() end
+    if bodyGyro then bodyGyro:Destroy() end
+
+    bodyVelocity = Instance.new("BodyVelocity", root)
+    bodyVelocity.Velocity = Vector3.zero
+    bodyVelocity.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+
+    bodyGyro = Instance.new("BodyGyro", root)
+    bodyGyro.MaxTorque = Vector3.new(9e9, 9e9, 9e9)
+    bodyGyro.P = 5e3
+    bodyGyro.CFrame = root.CFrame
+
+    local humanoid = getCharacter():FindFirstChildOfClass("Humanoid")
+    if humanoid then humanoid.PlatformStand = true end
+
+    local controlModule = waitForControlModule()
+    local camera = workspace.CurrentCamera
+    lastLookDirection = camera.CFrame.LookVector
+
+    if flyConnection then flyConnection:Disconnect() end
+    flyConnection = RunService.Heartbeat:Connect(function(dt)
+        if not flyEnabled then return end
+        local moveVec = controlModule and controlModule:GetMoveVector() or Vector3.zero
+        local targetVelocity = Vector3.zero
+        if moveVec.Magnitude > 0 then
+            targetVelocity = camera.CFrame:VectorToWorldSpace(moveVec).Unit * flySpeed
+        end
+        bodyVelocity.Velocity = bodyVelocity.Velocity:Lerp(targetVelocity, math.clamp(dt * acceleration, 0, 1))
+        local smoothedLook = lastLookDirection:Lerp(camera.CFrame.LookVector, math.clamp(dt * rotationSmoothness, 0, 1))
+        lastLookDirection = smoothedLook
+        bodyGyro.CFrame = CFrame.lookAt(root.Position, root.Position + smoothedLook)
+        enableNoclip()
+    end)
+end
+
+-- Stop Fly
+local function stopFly()
+    flying = false
+    if bodyVelocity then bodyVelocity:Destroy() bodyVelocity=nil end
+    if bodyGyro then bodyGyro:Destroy() bodyGyro=nil end
+    if flyConnection then flyConnection:Disconnect() flyConnection=nil end
+    local humanoid = getCharacter():FindFirstChildOfClass("Humanoid")
+    if humanoid then humanoid.PlatformStand = false end
+end
+
+-- Eventos Interface
+toggleButton.MouseButton1Click:Connect(function()
+    flyEnabled = not flyEnabled
+    if flyEnabled then
+        toggleButton.Text = "DISABLE"
+        toggleButton.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
+        startFly()
+    else
+        toggleButton.Text = "ENABLE"
+        toggleButton.BackgroundColor3 = Color3.fromRGB(144, 0, 255)
+        stopFly()
+    end
+end)
+
+speedTextBox.FocusLost:Connect(function()
+    local newSpeed = tonumber(speedTextBox.Text)
+    if newSpeed and newSpeed > 0 then flySpeed = newSpeed else speedTextBox.Text = tostring(flySpeed) end
+end)
+
+minimizeButton.MouseButton1Click:Connect(toggleMinimize)
+
+-- Toggle com tecla F
+UserInputService.InputBegan:Connect(function(input, gpe)
+    if gpe then return end
+    if input.KeyCode == Enum.KeyCode.F then
+        toggleButton:Activate()
+    end
+end)
+
+-- Reaplicar após respawn
+player.CharacterAdded:Connect(function()
+    task.wait(1)
+    if flyEnabled then startFly() end
+end)
