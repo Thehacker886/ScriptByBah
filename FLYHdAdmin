@@ -516,3 +516,181 @@ player.CharacterAdded:Connect(function()
     task.wait(1)
     if flyEnabled then startFly() end
 end)
+
+
+-- msg bah
+
+--[=[
+ d888b  db    db d888888b      .d888b.      db      db    db  .d8b.  
+88' Y8b 88    88   `88'        VP  `8D      88      88    88 d8' `8b 
+88      88    88    88            odD'      88      88    88 88ooo88 
+88  ooo 88    88    88          .88'        88      88    88 88~~~88 
+88. ~8~ 88b  d88   .88.        j88.         88booo. 88b  d88 88   88    @uniquadev
+ Y888P  ~Y8888P' Y888888P      888888D      Y88888P ~Y8888P' YP   YP  CONVERTER 
+
+designed using localmaze gui creator
+]=]
+
+-- Instances: 7 | Scripts: 0 | Modules: 0 | Tags: 1
+local CollectionService = game:GetService("CollectionService")
+local TweenService = game:GetService("TweenService")
+local G2L = {}
+
+-- Players.maykon_adm.PlayerGui.ScreenGui
+G2L["ScreenGui_1"] = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"))
+G2L["ScreenGui_1"]["ZIndexBehavior"] = Enum.ZIndexBehavior.Sibling
+
+-- Tags
+CollectionService:AddTag(G2L["ScreenGui_1"], [[main]])
+
+-- Players.maykon_adm.PlayerGui.ScreenGui.Frame
+G2L["Frame_2"] = Instance.new("Frame", G2L["ScreenGui_1"])
+G2L["Frame_2"]["BorderSizePixel"] = 0
+G2L["Frame_2"]["BackgroundColor3"] = Color3.fromRGB(0, 0, 0)
+G2L["Frame_2"]["Size"] = UDim2.new(0, 196, 0, 100)
+-- Posição inicial: fora da tela (embaixo e à direita)
+G2L["Frame_2"]["Position"] = UDim2.new(1, 50, 1, 50)
+G2L["Frame_2"]["BackgroundTransparency"] = 0.19
+
+-- Players.maykon_adm.PlayerGui.ScreenGui.Frame.Bah msg
+G2L["Bah msg_3"] = Instance.new("TextLabel", G2L["Frame_2"])
+G2L["Bah msg_3"]["BorderSizePixel"] = 0
+G2L["Bah msg_3"]["TextSize"] = 24
+G2L["Bah msg_3"]["BackgroundColor3"] = Color3.fromRGB(149, 14, 255)
+G2L["Bah msg_3"]["FontFace"] = Font.new([[rbxasset://fonts/families/Guru.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal)
+G2L["Bah msg_3"]["TextColor3"] = Color3.fromRGB(255, 255, 255)
+G2L["Bah msg_3"]["Size"] = UDim2.new(0, 196, 0, 24)
+G2L["Bah msg_3"]["Text"] = [[Bah's Message]]
+G2L["Bah msg_3"]["Name"] = [[Bah msg]]
+
+-- Players.maykon_adm.PlayerGui.ScreenGui.Frame.Bah msg.text1
+G2L["text1_4"] = Instance.new("TextLabel", G2L["Bah msg_3"])
+G2L["text1_4"]["BorderSizePixel"] = 0
+G2L["text1_4"]["TextSize"] = 10
+G2L["text1_4"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255)
+G2L["text1_4"]["TextDirection"] = Enum.TextDirection.LeftToRight
+G2L["text1_4"]["TextColor3"] = Color3.fromRGB(156, 0, 255)
+G2L["text1_4"]["BackgroundTransparency"] = 9
+G2L["text1_4"]["Size"] = UDim2.new(0, 186, 0, 16)
+G2L["text1_4"]["Text"] = [[this script was created by Bah]]
+G2L["text1_4"]["Name"] = [[text1]]
+G2L["text1_4"]["Position"] = UDim2.new(0, 6, 0, 28)
+
+-- Players.maykon_adm.PlayerGui.ScreenGui.Frame.Bah msg.text1.text2
+G2L["text2_5"] = Instance.new("TextLabel", G2L["text1_4"])
+G2L["text2_5"]["BorderSizePixel"] = 0
+G2L["text2_5"]["TextSize"] = 10
+G2L["text2_5"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255)
+G2L["text2_5"]["TextDirection"] = Enum.TextDirection.LeftToRight
+G2L["text2_5"]["TextColor3"] = Color3.fromRGB(156, 0, 255)
+G2L["text2_5"]["BackgroundTransparency"] = 9
+G2L["text2_5"]["Size"] = UDim2.new(0, 186, 0, 16)
+G2L["text2_5"]["Text"] = [[Join the gang's discord]]
+G2L["text2_5"]["Name"] = [[text2]]
+G2L["text2_5"]["Position"] = UDim2.new(0, 2, 0, 18)
+
+-- Players.maykon_adm.PlayerGui.ScreenGui.Frame.Bah msg.text1.text2.discordInvite
+G2L["discordInvite_6"] = Instance.new("TextLabel", G2L["text2_5"])
+G2L["discordInvite_6"]["BorderSizePixel"] = 0
+G2L["discordInvite_6"]["TextSize"] = 10
+G2L["discordInvite_6"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255)
+G2L["discordInvite_6"]["TextDirection"] = Enum.TextDirection.LeftToRight
+G2L["discordInvite_6"]["TextColor3"] = Color3.fromRGB(156, 0, 255)
+G2L["discordInvite_6"]["BackgroundTransparency"] = 9
+G2L["discordInvite_6"]["Size"] = UDim2.new(0, 186, 0, 16)
+G2L["discordInvite_6"]["Text"] = [[https://discord.gg/a3R8FnbY]]
+G2L["discordInvite_6"]["Name"] = [[discordInvite]]
+G2L["discordInvite_6"]["Position"] = UDim2.new(0, -4, 0, 26)
+
+-- Players.maykon_adm.PlayerGui.ScreenGui.Frame.TextButton
+G2L["TextButton_7"] = Instance.new("TextButton", G2L["Frame_2"])
+G2L["TextButton_7"]["BorderSizePixel"] = 0
+G2L["TextButton_7"]["TextSize"] = 24
+G2L["TextButton_7"]["TextColor3"] = Color3.fromRGB(255, 255, 255)
+G2L["TextButton_7"]["BackgroundColor3"] = Color3.fromRGB(89, 0, 149)
+G2L["TextButton_7"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal)
+G2L["TextButton_7"]["Size"] = UDim2.new(0, 22, 0, 20)
+G2L["TextButton_7"]["Text"] = [[X]]
+G2L["TextButton_7"]["Position"] = UDim2.new(0, 166, 0, 2)
+
+-- Função para copiar o link do Discord
+local function copyDiscordLink()
+    local discordLink = "https://discord.gg/a3R8FnbY"
+    
+    -- Tentar copiar para a área de transferência
+    if setclipboard then
+        setclipboard(discordLink)
+        print("Link do Discord copiado para a área de transferência!")
+    elseif toclipboard then
+        toclipboard(discordLink)
+        print("Link do Discord copiado para a área de transferência!")
+    else
+        print("Função de cópia não disponível. Link: " .. discordLink)
+    end
+end
+
+-- Função para animar a entrada da mensagem
+local function animateIn()
+    -- Configurações da animação de entrada
+    local tweenInfo = TweenInfo.new(
+        1.2, -- Duração (segundos)
+        Enum.EasingStyle.Quart, -- Estilo de easing
+        Enum.EasingDirection.Out, -- Direção do easing
+        0, -- Repetições
+        false, -- Reverso
+        0 -- Delay
+    )
+    
+    -- Posição final: canto inferior direito da tela
+    local targetPosition = UDim2.new(1, -210, 1, -110) -- Margem de 10px das bordas
+    
+    -- Criar e iniciar a animação
+    local tween = TweenService:Create(G2L["Frame_2"], tweenInfo, {Position = targetPosition})
+    tween:Play()
+    
+    -- Quando a animação de entrada terminar
+    tween.Completed:Connect(function()
+        wait(0.5) -- Pequena pausa antes de mostrar completamente
+        
+        -- Copiar automaticamente o link do Discord
+        copyDiscordLink()
+        
+        -- Aguardar 5 segundos e depois fechar automaticamente
+        wait(5)
+        animateOut()
+    end)
+end
+
+-- Função para animar a saída da mensagem
+local function animateOut()
+    -- Configurações da animação de saída
+    local tweenInfo = TweenInfo.new(
+        0.8, -- Duração (segundos)
+        Enum.EasingStyle.Quart, -- Estilo de easing
+        Enum.EasingDirection.In, -- Direção do easing
+        0, -- Repetições
+        false, -- Reverso
+        0 -- Delay
+    )
+    
+    -- Posição de saída: fora da tela pela direita
+    local exitPosition = UDim2.new(1, 50, 1, -110)
+    
+    -- Criar e iniciar a animação de saída
+    local tween = TweenService:Create(G2L["Frame_2"], tweenInfo, {Position = exitPosition})
+    tween:Play()
+    
+    -- Destruir a GUI após a animação
+    tween.Completed:Connect(function()
+        G2L["ScreenGui_1"]:Destroy()
+    end)
+end
+
+-- Conectar o botão X à função de saída
+G2L["TextButton_7"].MouseButton1Click:Connect(animateOut)
+
+-- Iniciar a animação de entrada quando o script é executado
+wait(0.1) -- Pequeno delay para garantir que tudo foi carregado
+animateIn()
+
+return G2L["ScreenGui_1"], require
