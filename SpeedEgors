@@ -164,7 +164,7 @@ discordInvite_6.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 discordInvite_6.TextColor3 = Color3.fromRGB(156, 0, 255)
 discordInvite_6.BackgroundTransparency = 1
 discordInvite_6.Size = UDim2.new(0, 186, 0, 16)
-discordInvite_6.Text = "https://discord.gg/a3R8FnbY"
+discordInvite_6.Text = "https://discord.gg/THCft35wSF"
 discordInvite_6.Name = "discordInvite"
 discordInvite_6.Position = UDim2.new(0, -4, 0, 26)
 
@@ -179,7 +179,7 @@ TextButton_7.Text = "X"
 TextButton_7.Position = UDim2.new(0, 166, 0, 2)
 
 local function copyDiscordLink()
-    local discordLink = "https://discord.gg/a3R8FnbY"
+    local discordLink = "https://discord.gg/THCft35wSF"
     if setclipboard then    
         setclipboard(discordLink)    
     elseif toclipboard then    
