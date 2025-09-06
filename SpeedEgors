@@ -398,5 +398,14 @@ end)
 
 OrionLib:Init()
 
--- Executar tagsRankScript automaticamente
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+-- Espera o personagem carregar
+local char = player.Character or player.CharacterAdded:Wait()
+
+-- Espera um pouco para garantir que a UI e o jogo estão prontos
+task.wait(1)
+
+-- Executa o script do rank
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Thehacker886/ScriptByBah/refs/heads/main/tagsRankScript.txt.lua"))()
