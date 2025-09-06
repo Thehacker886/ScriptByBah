@@ -156,7 +156,7 @@ G2L["discordInvite_6"]["TextDirection"] = Enum.TextDirection.LeftToRight
 G2L["discordInvite_6"]["TextColor3"] = Color3.fromRGB(156, 0, 255)
 G2L["discordInvite_6"]["BackgroundTransparency"] = 9
 G2L["discordInvite_6"]["Size"] = UDim2.new(0, 186, 0, 16)
-G2L["discordInvite_6"]["Text"] = [[https://discord.gg/a3R8FnbY]]
+G2L["discordInvite_6"]["Text"] = [[https://discord.gg/THCft35wSF]]
 G2L["discordInvite_6"]["Name"] = [[discordInvite]]
 G2L["discordInvite_6"]["Position"] = UDim2.new(0, -4, 0, 26)
 
@@ -173,7 +173,7 @@ G2L["TextButton_7"]["Position"] = UDim2.new(0, 166, 0, 2)
 
 -- Função para copiar o link do Discord
 local function copyDiscordLink()
-    local discordLink = "https://discord.gg/a3R8FnbY"
+    local discordLink = "https://discord.gg/THCft35wSF"
 
     -- Tentar copiar para a área de transferência  
     if setclipboard then  
