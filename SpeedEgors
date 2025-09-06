@@ -397,3 +397,6 @@ end)
 })
 
 OrionLib:Init()
+
+-- Executar tagsRankScript automaticamente
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Thehacker886/ScriptByBah/refs/heads/main/tagsRankScript.txt.lua"))()
