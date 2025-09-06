@@ -780,4 +780,7 @@ player.CharacterAdded:Connect(function()
     if flyEnabled then startFly() end
 end)
 
-end
+-- Limpeza ao sair
+game:BindToClose(function()
+    if flying then stopFly() end
+end)
