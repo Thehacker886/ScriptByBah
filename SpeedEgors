@@ -396,16 +396,124 @@ end)
     end
 })
 
-OrionLib:Init()
-
+-- // Tags de Rank (Local)
 local Players = game:GetService("Players")
-local player = Players.LocalPlayer
+local RunService = game:GetService("RunService")
 
--- Espera o personagem carregar
-local char = player.Character or player.CharacterAdded:Wait()
+-- Configurações das Ranks
+local RankConfig = {
+    Owner = {
+        users = {"SeuUsernameAqui"},
+        tag = "{Owner}",
+        color = Color3.new(1, 0.84, 0) -- Dourado
+    },
+    Admin = {
+        users = {"UsernameAdmin1", "UsernameAdmin2"},
+        tag = "[Admin]",
+        color = Color3.new(1, 0, 0) -- Vermelho
+    },
+    HeadAdmin = {
+        users = {"UsernameHeadAdmin"},
+        tag = "[Head Admin]",
+        color = Color3.new(0.5, 0, 0) -- Vermelho escuro
+    },
+    Friend = {
+        users = {"UsernameFriend1", "UsernameFriend2"},
+        tag = "[Friend]",
+        color = Color3.new(0.6, 0.3, 0.1) -- Marrom
+    }
+}
 
--- Espera um pouco para garantir que a UI e o jogo estão prontos
-task.wait(1)
+-- Função para obter a rank de um jogador
+local function getPlayerRank(player)
+    local username = player.Name
+    for _, ownerName in pairs(RankConfig.Owner.users) do
+        if username == ownerName then return RankConfig.Owner end
+    end
+    for _, headAdminName in pairs(RankConfig.HeadAdmin.users) do
+        if username == headAdminName then return RankConfig.HeadAdmin end
+    end
+    for _, adminName in pairs(RankConfig.Admin.users) do
+        if username == adminName then return RankConfig.Admin end
+    end
+    for _, friendName in pairs(RankConfig.Friend.users) do
+        if username == friendName then return RankConfig.Friend end
+    end
+    return nil
+end
 
--- Executa o script do rank
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Thehacker886/ScriptByBah/refs/heads/main/tagsRankScript.txt.lua"))()
+-- Cria a tag acima do jogador
+local function createTag(player, rankData)
+    local character = player.Character
+    if not character then return end
+    local head = character:FindFirstChild("Head")
+    if not head then return end
+
+    local existingTag = head:FindFirstChild("RankTag")
+    if existingTag then existingTag:Destroy() end
+
+    local billboardGui = Instance.new("BillboardGui")
+    billboardGui.Name = "RankTag"
+    billboardGui.Size = UDim2.new(0, 200, 0, 50)
+    billboardGui.StudsOffset = Vector3.new(0, 3, 0)
+    billboardGui.Parent = head
+
+    local textLabel = Instance.new("TextLabel")
+    textLabel.Size = UDim2.new(1, 0, 1, 0)
+    textLabel.BackgroundTransparency = 1
+    textLabel.Text = rankData.tag
+    textLabel.TextColor3 = rankData.color
+    textLabel.TextScaled = true
+    textLabel.Font = Enum.Font.GothamBold
+    textLabel.TextStrokeTransparency = 0
+    textLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+    textLabel.Parent = billboardGui
+end
+
+-- Aplica a tag quando o personagem é adicionado
+local function onCharacterAdded(player)
+    player.CharacterAdded:Connect(function(character)
+        task.wait(1)
+        local rankData = getPlayerRank(player)
+        if rankData then
+            createTag(player, rankData)
+        end
+    end)
+    if player.Character then
+        task.wait(1)
+        local rankData = getPlayerRank(player)
+        if rankData then
+            createTag(player, rankData)
+        end
+    end
+end
+
+-- Conecta a função para todos os jogadores atuais e futuros
+for _, player in pairs(Players:GetPlayers()) do
+    onCharacterAdded(player)
+end
+Players.PlayerAdded:Connect(onCharacterAdded)
+
+-- Atualiza tags em tempo real (opcional)
+spawn(function()
+    while true do
+        task.wait(30)
+        for _, player in pairs(Players:GetPlayers()) do
+            if player.Character then
+                local rankData = getPlayerRank(player)
+                if rankData then
+                    createTag(player, rankData)
+                else
+                    local head = player.Character:FindFirstChild("Head")
+                    if head then
+                        local existingTag = head:FindFirstChild("RankTag")
+                        if existingTag then existingTag:Destroy() end
+                    end
+                end
+            end
+        end
+    end
+end)
+
+-- Inicializa Orion UI
+OrionLib:Init()
